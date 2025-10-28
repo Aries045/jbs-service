@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.work.DmUserMapper">
+
+    <resultMap type="DmUser" id="DmUserResult">
+        <result property="id"    column="id"    />
+        <result property="dmName"    column="dm_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="address"    column="address"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="idNumber"    column="id_number"    />
+        <result property="titleName"    column="title_name"    />
+        <result property="titleCode"    column="title_code"    />
+        <result property="salary"    column="salary"    />
+        <result property="entryDate"    column="entry_date"    />
+        <result property="resignDate"    column="resign_date"    />
+        <result property="isResign"    column="is_resign"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectDmUserVo">
+        select id, dm_name, phone, address, birthday, id_number, title_name, title_code, salary, entry_date, resign_date, is_resign, del_flag from dm_user
+    </sql>
+
+    <select id="selectDmUserList" parameterType="DmUser" resultMap="DmUserResult">
+        <include refid="selectDmUserVo"/>
+        <where>
+            <if test="dmName != null  and dmName != ''"> and dm_name like concat('%', #{dmName}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="idNumber != null  and idNumber != ''"> and id_number = #{idNumber}</if>
+            <if test="titleName != null  and titleName != ''"> and title_name like concat('%', #{titleName}, '%')</if>
+            <if test="titleCode != null  and titleCode != ''"> and title_code = #{titleCode}</if>
+            <if test="salary != null "> and salary = #{salary}</if>
+            <if test="params.beginEntryDate != null and params.beginEntryDate != '' and params.endEntryDate != null and params.endEntryDate != ''"> and entry_date between #{params.beginEntryDate} and #{params.endEntryDate}</if>
+            <if test="params.beginResignDate != null and params.beginResignDate != '' and params.endResignDate != null and params.endResignDate != ''"> and resign_date between #{params.beginResignDate} and #{params.endResignDate}</if>
+            <if test="isResign != null "> and is_resign = #{isResign}</if>
+        </where>
+    </select>
+
+    <select id="selectDmUserById" parameterType="Long" resultMap="DmUserResult">
+        <include refid="selectDmUserVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDmUser" parameterType="DmUser">
+        insert into dm_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="dmName != null and dmName != ''">dm_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="address != null">address,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="idNumber != null">id_number,</if>
+            <if test="titleName != null and titleName != ''">title_name,</if>
+            <if test="titleCode != null and titleCode != ''">title_code,</if>
+            <if test="salary != null">salary,</if>
+            <if test="entryDate != null">entry_date,</if>
+            <if test="resignDate != null">resign_date,</if>
+            <if test="isResign != null">is_resign,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="dmName != null and dmName != ''">#{dmName},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="address != null">#{address},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="idNumber != null">#{idNumber},</if>
+            <if test="titleName != null and titleName != ''">#{titleName},</if>
+            <if test="titleCode != null and titleCode != ''">#{titleCode},</if>
+            <if test="salary != null">#{salary},</if>
+            <if test="entryDate != null">#{entryDate},</if>
+            <if test="resignDate != null">#{resignDate},</if>
+            <if test="isResign != null">#{isResign},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDmUser" parameterType="DmUser">
+        update dm_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dmName != null and dmName != ''">dm_name = #{dmName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="idNumber != null">id_number = #{idNumber},</if>
+            <if test="titleName != null and titleName != ''">title_name = #{titleName},</if>
+            <if test="titleCode != null and titleCode != ''">title_code = #{titleCode},</if>
+            <if test="salary != null">salary = #{salary},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="resignDate != null">resign_date = #{resignDate},</if>
+            <if test="isResign != null">is_resign = #{isResign},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDmUserById" parameterType="Long">
+        delete from dm_user where id = #{id}
+    </delete>
+
+    <delete id="deleteDmUserByIds" parameterType="String">
+        delete from dm_user where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
